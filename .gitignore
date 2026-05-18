@@ -1,0 +1,11 @@
+# Build artifacts
+*.zip
+
+# Editor
+.DS_Store
+*.swp
+*~
+
+# Temp
+*.tmp
+*.log
