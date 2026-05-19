@@ -92,6 +92,32 @@ Alias resolution lets you type short forms: `/install_module adguard`, `/install
 | `/tor {status\|on\|off\|route\|fingerprint\|through}` | tor-relay | Bridge + VPN-aware + per-client transparent |
 | `/mitm {status\|gen_ca\|ca\|add\|remove\|on\|off\|flows}` | mitm-lab | ⚠ HTTPS decrypt lab |
 
+## Resource footprint
+
+ZTE F50 has **1441 MB RAM** and a 4-core Unisoc UMS9620. Below is the idle resident set + idle CPU share of each module's daemons, as observed on-device for the released ones and estimated (marked 🚧) for those still under development. CPU figures are total-system percent on a 4-core SoC; treat them as "≤" — bursts during work (SMS poll, Telegram callback, DNS query, SIP REGISTER) are higher but short-lived.
+
+| Module | Idle RAM (RSS) | Idle CPU (%) | Notes |
+|---|---:|---:|---|
+| **bin-utils** | 0 MB | 0% | Static binaries on disk only — no daemon |
+| **statusbot** | ~25–30 MB | 0.1–0.3% | bash 5 + curl long-poll loop |
+| **cloudflared-tunnel** | ~30 MB | 0.3–0.5% | Go + QUIC keepalive |
+| **dropbear-ssh** | ~1 MB (idle) | ~0% | +2–3 MB per active session |
+| **wireless-adb-keeper** | 0 MB | 0% | One-shot boot script |
+| **tailscale-control** | ~15–20 MB | 0.1–0.2% | tailscaled (Go) keepalive |
+| **traffic-stats** | ~1 MB | ~0.1% | Shell sample every 60 s |
+| **adguardhome** | ~40–50 MB | 0.2–0.5% | Go + DNS cache; scales with QPS |
+| **cell-tools** | ~1–2 MB | ~0.1% | bash AT poll every 60 s |
+| **sms-cmd** | ~1–2 MB | ~0.1% | bash `AT+CMGL` poll every 30 s |
+| **tor-relay** (idle) | ~25–30 MB | 0.2–0.5% | Bandwidth use adds CPU |
+| **mitm-lab** (disabled) | 0 MB | 0% | Default off; ~20 MB when enabled |
+| **openeuicc-systemizer** | 0 MB | 0% | system_ext overlay, no daemon |
+| **sip-server** 🚧 | ~10–15 MB | ~0.1% | Go UDP/5060 listener |
+| **ims-voice-fix** 🚧 | **0 MB** | **0%** | Bind-mount overlay — same process as stock IMS |
+| **f50sip-app** (com.f50.sip) | ~30–40 MB | 0.1–0.3% | Foreground service + WakeLock |
+| **Typical full stack idle** | **~180–220 MB** | **~2–4%** | ~12–15% of 1441 MB RAM |
+
+`ims-voice-fix` is genuinely free — it doesn't start any new process, it just swaps the on-disk apk that the existing `com.spreadtrum.ims` service already loads. `sip-server` is the cheapest new daemon; `f50sip-app` is the most expensive single piece purely because Android VM overhead per app is ~30 MB minimum.
+
 ## modules.json
 
 The bot reads [`modules.json`](modules.json) at install time. Schema v2:
