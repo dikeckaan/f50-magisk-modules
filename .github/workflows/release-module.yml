@@ -23,7 +23,27 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run lang validator (if present)
+        run: |
+          if [ -x lang/validate.sh ]; then
+            lang/validate.sh
+          else
+            echo "(no lang/validate.sh — skipping)"
+          fi
+      - name: Run tests (if present)
+        run: |
+          if [ -x tests/run.sh ]; then
+            tests/run.sh
+          else
+            echo "(no tests/run.sh — skipping)"
+          fi
+
   release:
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       id:      ${{ steps.meta.outputs.id }}
