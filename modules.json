@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "id": "bin-utils",
+      "name": "bin-utils",
+      "description": "Static arm64 binaries (curl, wget, jq, bash, sendat, busybox) + CA bundle",
+      "required": true,
+      "aliases": [],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-bin-utils/main/update.json"
+    },
+    {
+      "id": "statusbot",
+      "name": "Telegram Status Bot",
+      "description": "Telegram bot for status, performance, SMS, IMEI, /update, /install_module, etc.",
+      "required": true,
+      "aliases": ["bot"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-statusbot/main/update.json"
+    },
+    {
+      "id": "cloudflared-tunnel",
+      "name": "Cloudflared Tunnel",
+      "description": "Cloudflare Tunnel daemon for remote SSH/ADB via Zero Trust",
+      "required": false,
+      "aliases": ["cloudflared", "tunnel", "cf"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-cloudflared-tunnel/main/update.json"
+    },
+    {
+      "id": "dropbear-ssh",
+      "name": "Dropbear SSH",
+      "description": "SSH server on port 22222 with key-only auth",
+      "required": false,
+      "aliases": ["dropbear", "ssh"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-dropbear-ssh/main/update.json"
+    },
+    {
+      "id": "wireless-adb-keeper",
+      "name": "Wireless ADB Keeper",
+      "description": "Forces ADB on port 55555 every boot (avoids UFI conflict)",
+      "required": false,
+      "aliases": ["wireless-adb", "adb-keeper", "adb"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-wireless-adb-keeper/main/update.json"
+    },
+    {
+      "id": "tailscale-control",
+      "name": "Tailscale Control",
+      "description": "Tailscale daemon + bot integration, adaptive routing, exit node",
+      "required": false,
+      "aliases": ["tailscale", "ts"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-tailscale-control/main/update.json"
+    },
+    {
+      "id": "traffic-stats",
+      "name": "Traffic Stats (vnstat-lite)",
+      "description": "Pure-shell daily RX/TX accumulator (read via /traffic_history)",
+      "required": false,
+      "aliases": ["traffic", "vnstat"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-traffic-stats/main/update.json"
+    },
+    {
+      "id": "adguardhome",
+      "name": "AdGuard Home",
+      "description": "Network-wide DNS ad-blocker; transparent NAT redirect for hotspot clients",
+      "required": false,
+      "aliases": ["adguard", "agh", "adblock"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-adguardhome/main/update.json"
+    }
+  ]
+}
