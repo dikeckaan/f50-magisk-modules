@@ -121,6 +121,17 @@
       "dependencies": ["bin-utils"],
       "aliases": ["tor", "bridge", "onion"],
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-tor-relay/main/update.json"
+    },
+    {
+      "id": "mitm-lab",
+      "name": "HTTPS MITM Lab",
+      "description": "⚠ DANGEROUS — transparent HTTPS MITM proxy. Decrypts TLS for selected hotspot clients via custom 4.8 MB Go binary + self-signed CA. Installed but DISABLED by default. Cert-pinned apps will break.",
+      "required": false,
+      "arch": "arm64",
+      "min_magisk_version": 26000,
+      "dependencies": ["bin-utils"],
+      "aliases": ["mitm", "intercept"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-mitm-lab/main/update.json"
     }
   ]
 }
