@@ -143,6 +143,18 @@
       "dependencies": ["bin-utils"],
       "aliases": ["sip", "voip"],
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-sip-server/main/update.json"
+    },
+    {
+      "id": "ims-voice-fix",
+      "name": "IMS Voice Fix [UNDER DEVELOPMENT]",
+      "description": "⚠ EXPLORATORY — root cause unconfirmed. Bind-mounts a patched com.spreadtrum.ims; replaces PhoneStateMonitor.onScreenStateChanged(0) in the SCREEN_OFF receiver with 3x nop. Hypothesis: F50's short screen timeout was tearing down cellular/VoWiFi calls. Counterexample seen on another F50 same carrier → not confirmed yet. See repo for the screen_off_timeout=infinity self-test.",
+      "required": false,
+      "arch": "arm64",
+      "min_magisk_version": 26000,
+      "dependencies": [],
+      "aliases": ["ims", "voice-fix"],
+      "status": "under_development",
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-ims-voice-fix/main/update.json"
     }
   ]
 }
