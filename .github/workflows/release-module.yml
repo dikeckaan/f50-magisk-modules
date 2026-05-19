@@ -1,0 +1,145 @@
+name: Reusable — Build + Release Magisk module
+
+on:
+  workflow_call:
+    inputs:
+      excludes:
+        description: 'Extra space-separated glob patterns to exclude from the zip (e.g. "tests/* docs/*").'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      id:
+        description: Module id from module.prop
+        value: ${{ jobs.release.outputs.id }}
+      version:
+        description: Module version from module.prop
+        value: ${{ jobs.release.outputs.version }}
+      sha256:
+        description: SHA-256 of the built zip
+        value: ${{ jobs.release.outputs.sha256 }}
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      id:      ${{ steps.meta.outputs.id }}
+      version: ${{ steps.meta.outputs.version }}
+      sha256:  ${{ steps.hash.outputs.sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse module.prop
+        id: meta
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          ID=$(grep '^id=' module.prop | cut -d= -f2)
+          VERSION=$(grep '^version=' module.prop | cut -d= -f2)
+          VCODE=$(grep '^versionCode=' module.prop | cut -d= -f2)
+          ZIPURL="https://github.com/$REPO/releases/download/$VERSION/$ID-$VERSION.zip"
+          RAW="https://raw.githubusercontent.com/$REPO/main"
+          {
+            echo "id=$ID"
+            echo "version=$VERSION"
+            echo "vcode=$VCODE"
+            echo "zipurl=$ZIPURL"
+            echo "raw=$RAW"
+          } >> "$GITHUB_OUTPUT"
+          echo "Parsed: id=$ID version=$VERSION vcode=$VCODE"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release $VERSION already exists, skipping"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build module zip
+        id: build
+        if: steps.check.outputs.exists == 'false'
+        env:
+          ID: ${{ steps.meta.outputs.id }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          EXTRA_EXCLUDES: ${{ inputs.excludes }}
+        run: |
+          ZIP="${ID}-${VERSION}.zip"
+          # shellcheck disable=SC2086
+          zip -rq "$ZIP" . \
+            -x ".git/*" ".github/*" "*.zip" \
+               ".gitignore" "LICENSE" "CHANGELOG.md" "update.json" \
+               "README.md" $EXTRA_EXCLUDES
+          # Re-include README if it exists (most modules ship it).
+          [ -f README.md ] && zip -q "$ZIP" README.md
+          ls -lh "$ZIP"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+
+      - name: Compute SHA-256
+        id: hash
+        if: steps.check.outputs.exists == 'false'
+        env:
+          ZIP: ${{ steps.build.outputs.zip }}
+        run: |
+          SHA=$(sha256sum "$ZIP" | awk '{print $1}')
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "SHA-256: $SHA"
+
+      - name: Write update.json
+        if: steps.check.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          VCODE: ${{ steps.meta.outputs.vcode }}
+          ZIPURL: ${{ steps.meta.outputs.zipurl }}
+          SHA256: ${{ steps.hash.outputs.sha256 }}
+          RAW: ${{ steps.meta.outputs.raw }}
+        run: |
+          cat > update.json <<EOF
+          {
+              "version": "$VERSION",
+              "versionCode": $VCODE,
+              "zipUrl": "$ZIPURL",
+              "sha256": "$SHA256",
+              "changelog": "$RAW/CHANGELOG.md"
+          }
+          EOF
+          cat update.json
+
+      - name: Commit update.json
+        if: steps.check.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          if git diff --quiet update.json; then
+            echo "update.json unchanged"
+          else
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add update.json
+            git commit -m "chore: bump update.json to $VERSION"
+            git push
+          fi
+
+      - name: Create release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ID: ${{ steps.meta.outputs.id }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          SHA256: ${{ steps.hash.outputs.sha256 }}
+          ZIP: ${{ steps.build.outputs.zip }}
+        run: |
+          gh release create "$VERSION" \
+            --title "$ID $VERSION" \
+            --notes "Auto-released from module.prop change. SHA-256: \`$SHA256\`. See [CHANGELOG.md](CHANGELOG.md)." \
+            "$ZIP"
