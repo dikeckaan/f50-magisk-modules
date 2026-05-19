@@ -11,14 +11,18 @@ Magisk modules for **ZTE F50** (rooted Android 13, Unisoc UMS9620). Each module 
 | **dropbear-ssh** | Dropbear SSH server on port 22222, key-only auth | [magisk-zte-f50-dropbear-ssh](https://github.com/dikeckaan/magisk-zte-f50-dropbear-ssh) |
 | **wireless-adb-keeper** | Forces ADB on port 55555 every boot (avoids UFI conflict) | [magisk-zte-f50-wireless-adb-keeper](https://github.com/dikeckaan/magisk-zte-f50-wireless-adb-keeper) |
 | **tailscale-control** | Tailscale 1.98.2 (arm64), toggle from bot, adaptive routing | [magisk-zte-f50-tailscale-control](https://github.com/dikeckaan/magisk-zte-f50-tailscale-control) |
-| **statusbot** | Telegram bot for everything: status, AT, SMS, performance, IMEI, speedtest, `/update`, etc. | [magisk-zte-f50-statusbot](https://github.com/dikeckaan/magisk-zte-f50-statusbot) |
+| **statusbot** | Telegram bot for everything: status, AT, SMS, performance, IMEI, speedtest, `/update`, `/install`, etc. (12-language UI) | [magisk-zte-f50-statusbot](https://github.com/dikeckaan/magisk-zte-f50-statusbot) |
+| **traffic-stats** | Pure-shell vnstat-lite — daily per-interface RX/TX accumulator, survives counter resets | [magisk-zte-f50-traffic-stats](https://github.com/dikeckaan/magisk-zte-f50-traffic-stats) |
+| **adguardhome** | Network-wide DNS ad-blocker; transparent NAT redirect on br0 filters hotspot clients; web UI on :3000 | [magisk-zte-f50-adguardhome](https://github.com/dikeckaan/magisk-zte-f50-adguardhome) |
 
 ## Dependency graph
 
 ```
 statusbot
-  └── bin-utils                  (curl, jq, sendat, CA bundle — required)
+  └── bin-utils                  (curl, jq, sendat, bash, CA bundle — required)
   └── tailscale-control          (optional, for /tailscale toggle)
+  └── traffic-stats              (optional, for /traffic_history)
+  └── adguardhome                (optional, for /adguard)
 cloudflared-tunnel               (independent — for remote SSH/ADB)
 dropbear-ssh                     (independent — SSH access)
 wireless-adb-keeper              (independent — ADB on alternate port)
@@ -32,6 +36,10 @@ wireless-adb-keeper              (independent — ADB on alternate port)
 4. **Flash `wireless-adb-keeper`** if you want ADB on port 55555 (avoids UFI-TOOLS conflict).
 5. **Flash `statusbot`** — put bot token at `/sdcard/statusbot_token.txt` and chat ID at `/sdcard/statusbot_chat_id.txt` *before* first boot (or set later).
 6. **(Optional)** Flash `tailscale-control` if you want Tailscale exit-node functionality. Configure via `/tailscale auth <key>` then `/tailscale on` from the bot.
+7. **(Optional)** Flash `traffic-stats` for per-interface daily traffic accounting. Bot exposes `/traffic_history` to read the DB.
+8. **(Optional)** Flash `adguardhome` for network-wide ad-blocking. Open `http://192.168.0.1:3000` from any hotspot client to finish the wizard. Bot exposes `/adguard {status|on|off|log|url}`.
+
+> Tip: optional modules can also be installed straight from the bot via `/install adguardhome`, `/install traffic-stats`, or `/install list` to see what's available.
 
 All modules auto-update via Magisk Manager (uses each module's `updateJson` URL). Bot's `/update` command also fetches updates on demand.
 
