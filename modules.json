@@ -110,6 +110,17 @@
       "dependencies": ["bin-utils"],
       "aliases": ["sms", "offline"],
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-sms-cmd/main/update.json"
+    },
+    {
+      "id": "tor-relay",
+      "name": "Tor Bridge (VPN-aware)",
+      "description": "Tor 0.4.9.8 bridge node (NOT exit) — contributes anonymous bandwidth from your cellular SIM, capped to 256 KB/s. Bundled OpenSSL/libevent (~9 MB). VPN-aware routing.",
+      "required": false,
+      "arch": "arm64",
+      "min_magisk_version": 26000,
+      "dependencies": ["bin-utils"],
+      "aliases": ["tor", "bridge", "onion"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-tor-relay/main/update.json"
     }
   ]
 }
