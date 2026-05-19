@@ -88,6 +88,17 @@
       "dependencies": ["bin-utils"],
       "aliases": ["adguard", "agh", "adblock"],
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-adguardhome/main/update.json"
+    },
+    {
+      "id": "cell-tools",
+      "name": "Cellular Tools",
+      "description": "Periodic AT-command poller, cell tower DB, IMSI-catcher anomaly detection. Powers /spectrum, /imsi_watch, /locate.",
+      "required": false,
+      "arch": "arm64",
+      "min_magisk_version": 26000,
+      "dependencies": ["bin-utils"],
+      "aliases": ["cells", "imsi", "spectrum"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-cell-tools/main/update.json"
     }
   ]
 }
