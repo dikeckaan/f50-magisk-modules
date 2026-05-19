@@ -135,13 +135,14 @@
     },
     {
       "id": "sip-server",
-      "name": "Embedded SIP Server",
-      "description": "Static UDP/5060 SIP server (~2.4 MB Go binary). Pairs with the f50sip-app (com.f50.sip) to forward SMS-over-SIP and call signaling between the F50 and your companion devices.",
+      "name": "Embedded SIP Server [UNDER DEVELOPMENT]",
+      "description": "⚠ EXPLORATORY. Static UDP/5060 SIP server (~2.4 MB Go binary). Pairs with the f50sip-app (com.f50.sip) to forward SMS-over-SIP and call signaling between the F50 and companion devices. SMS path works; end-to-end cellular-call observation across screen-off is pending and depends on ims-voice-fix to be valid.",
       "required": false,
       "arch": "arm64",
       "min_magisk_version": 26000,
-      "dependencies": ["bin-utils"],
+      "dependencies": ["bin-utils", "ims-voice-fix"],
       "aliases": ["sip", "voip"],
+      "status": "under_development",
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-sip-server/main/update.json"
     },
     {

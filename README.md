@@ -26,7 +26,7 @@ machine-readable catalog. Add a module = add an entry there.
 | **sms-cmd** | Offline SMS command channel. When Telegram is unreachable, an authorised phone can SMS a small command set (status, locate, reboot, panic, kill). Whitelist + shared secret + allowed-command gate. | [magisk-zte-f50-sms-cmd](https://github.com/dikeckaan/magisk-zte-f50-sms-cmd) |
 | **tor-relay** | Tor 0.4.9.8 bridge (NOT exit) with bundled OpenSSL/libevent (~9 MB). VPN-aware outbound routing (`direct`/`vpn`) + per-client transparent tor for hotspot clients (`/tor through`). | [magisk-zte-f50-tor-relay](https://github.com/dikeckaan/magisk-zte-f50-tor-relay) |
 | **mitm-lab** | ⚠ DANGEROUS — Transparent HTTPS MITM proxy. Custom 4.8 MB Go binary, local self-signed CA, per-client iptables redirect. Installed but DISABLED by default. Cert-pinned apps will break. | [magisk-zte-f50-mitm-lab](https://github.com/dikeckaan/magisk-zte-f50-mitm-lab) |
-| **sip-server** | Embedded UDP/5060 SIP server (~2.4 MB static Go binary). Pairs with the on-device `com.f50.sip` F50SipBridge app to forward SMS-over-SIP and call signaling between the F50 modem side and companion phones/laptops. | [magisk-zte-f50-sip-server](https://github.com/dikeckaan/magisk-zte-f50-sip-server) |
+| **sip-server** [🚧 dev] | ⚠ EXPLORATORY. Embedded UDP/5060 SIP server (~2.4 MB static Go binary). Pairs with the on-device `com.f50.sip` F50SipBridge app. SMS-over-SIP works; cellular-call observation depends on `ims-voice-fix` to survive the F50 screen-off timeout. | [magisk-zte-f50-sip-server](https://github.com/dikeckaan/magisk-zte-f50-sip-server) |
 | **ims-voice-fix** [🚧 dev] | ⚠ EXPLORATORY. Bind-mounts a patched `com.spreadtrum.ims` to disable the SCREEN_OFF → call-drop handler. Root cause unconfirmed (counterexample on a second F50 same carrier). See repo for the `screen_off_timeout=infinity` self-test before installing. | [magisk-zte-f50-ims-voice-fix](https://github.com/dikeckaan/magisk-zte-f50-ims-voice-fix) |
 
 ## Dependency graph
@@ -42,8 +42,8 @@ bin-utils                          (curl + jq + bash + sendat + cacert.pem + lib
   │     ├── sms-cmd                optional, /sms_cmd offline backup channel
   │     ├── tor-relay              optional, /tor bridge + through-tor
   │     ├── mitm-lab               optional, /mitm transparent HTTPS proxy
-  │     ├── sip-server             optional, embedded SIP server for F50SipBridge app
-  │     └── ims-voice-fix [dev]    exploratory, IMS apk overlay for screen-off call-drop
+  │     ├── ims-voice-fix [dev]    exploratory, IMS apk overlay for screen-off call-drop
+  │     └── sip-server     [dev]   exploratory, embedded SIP server (depends on ims-voice-fix)
   │
   ├── cloudflared-tunnel           independent — outbound Cloudflare Zero Trust tunnel for remote SSH/ADB
   ├── dropbear-ssh                 independent — SSH on :22222 (key-only)
