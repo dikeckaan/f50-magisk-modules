@@ -146,6 +146,17 @@
       "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-sip-server/main/update.json"
     },
     {
+      "id": "vpn-gateway",
+      "name": "VPN Gateway (Tailscale-aware fork)",
+      "description": "F50 fork of Kr328/vpn-gateway. Routes hotspot LAN clients through tun0 (Clash/sing-box/openclash); adds a high-prio ip rule that pins Tailscale CGNAT (100.64.0.0/10) to the main table so replies from on-device services to Tailscale peers don't get misrouted into the VPN tunnel.",
+      "required": false,
+      "arch": "arm64",
+      "min_magisk_version": 26000,
+      "dependencies": [],
+      "aliases": ["vpn", "gateway", "tun-gateway"],
+      "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-vpn-gateway/main/update.json"
+    },
+    {
       "id": "ims-voice-fix",
       "name": "IMS Voice Fix [UNDER DEVELOPMENT]",
       "description": "⚠ EXPLORATORY — root cause unconfirmed. Bind-mounts a patched com.spreadtrum.ims; replaces PhoneStateMonitor.onScreenStateChanged(0) in the SCREEN_OFF receiver with 3x nop. Hypothesis: F50's short screen timeout was tearing down cellular/VoWiFi calls. Counterexample seen on another F50 same carrier → not confirmed yet. See repo for the screen_off_timeout=infinity self-test.",

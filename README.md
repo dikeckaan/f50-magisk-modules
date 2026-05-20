@@ -28,6 +28,7 @@ machine-readable catalog. Add a module = add an entry there.
 | **mitm-lab** | ⚠ DANGEROUS — Transparent HTTPS MITM proxy. Custom 4.8 MB Go binary, local self-signed CA, per-client iptables redirect. Installed but DISABLED by default. Cert-pinned apps will break. | [magisk-zte-f50-mitm-lab](https://github.com/dikeckaan/magisk-zte-f50-mitm-lab) |
 | **sip-server** [🚧 dev] | ⚠ EXPLORATORY. Embedded UDP/5060 SIP server (~2.4 MB static Go binary). Pairs with the on-device `com.f50.sip` F50SipBridge app. SMS-over-SIP works; cellular-call observation depends on `ims-voice-fix` to survive the F50 screen-off timeout. | [magisk-zte-f50-sip-server](https://github.com/dikeckaan/magisk-zte-f50-sip-server) |
 | **ims-voice-fix** [🚧 dev] | ⚠ EXPLORATORY. Bind-mounts a patched `com.spreadtrum.ims` to disable the SCREEN_OFF → call-drop handler. Root cause unconfirmed (counterexample on a second F50 same carrier). See repo for the `screen_off_timeout=infinity` self-test before installing. | [magisk-zte-f50-ims-voice-fix](https://github.com/dikeckaan/magisk-zte-f50-ims-voice-fix) |
+| **vpn-gateway** | Fork of Kr328/vpn-gateway. Routes LAN clients through tun0, plus a Tailscale-aware exception (pref 9990) so on-device services reach Tailscale peers correctly without their replies being swallowed by the VPN tunnel. | [magisk-zte-f50-vpn-gateway](https://github.com/dikeckaan/magisk-zte-f50-vpn-gateway) |
 
 ## Dependency graph
 
