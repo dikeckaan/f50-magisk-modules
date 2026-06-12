@@ -29,6 +29,8 @@ machine-readable catalog. Add a module = add an entry there.
 | **sip-server** [🚧 dev] | ⚠ EXPLORATORY. Embedded UDP/5060 SIP server (~2.4 MB static Go binary). Pairs with the on-device `com.f50.sip` F50SipBridge app. SMS-over-SIP works; cellular-call observation depends on `ims-voice-fix` to survive the F50 screen-off timeout. | [magisk-zte-f50-sip-server](https://github.com/dikeckaan/magisk-zte-f50-sip-server) |
 | **ims-voice-fix** [🚧 dev] | ⚠ EXPLORATORY. Bind-mounts a patched `com.spreadtrum.ims` to disable the SCREEN_OFF → call-drop handler. Root cause unconfirmed (counterexample on a second F50 same carrier). See repo for the `screen_off_timeout=infinity` self-test before installing. | [magisk-zte-f50-ims-voice-fix](https://github.com/dikeckaan/magisk-zte-f50-ims-voice-fix) |
 | **vpn-gateway** | Fork of Kr328/vpn-gateway. Routes LAN clients through tun0, plus a Tailscale-aware exception (pref 9990) so on-device services reach Tailscale peers correctly without their replies being swallowed by the VPN tunnel. | [magisk-zte-f50-vpn-gateway](https://github.com/dikeckaan/magisk-zte-f50-vpn-gateway) |
+| **hotspot-region** | Change the WiFi regulatory region/country code at runtime (default TR, selectable) via `cmd wifi force-country-code` — no file/NVRAM edits, no bootloop risk. ADB CLI + bot `/region`. | [magisk-zte-f50-hotspot-region](https://github.com/dikeckaan/magisk-zte-f50-hotspot-region) |
+| **lite-mem** | Memory relief for the low-RAM F50: extra zstd zram swap, vm tuning, configurable debloat, and a shell/bot-toggleable kill of the ZTE goform web panel. CLI `lite-mem status / webui off\|on`, bot `/lite`. | [magisk-zte-f50-lite-mem](https://github.com/dikeckaan/magisk-zte-f50-lite-mem) |
 
 ## Dependency graph
 
@@ -69,6 +71,8 @@ bin-utils                          (curl + jq + bash + sendat + cacert.pem + lib
    - `/install_module mitm-lab` (⚠ read warnings)
    - `/install_module sip-server` (pair with f50sip-app)
    - `/install_module ims-voice-fix` (🚧 exploratory — read the repo README first; run the screen-off test before deciding)
+   - `/install_module hotspot-region` (alias: region)
+   - `/install_module lite-mem` (alias: mem / zram — adds zram swap + debloat)
 
 Alias resolution lets you type short forms: `/install_module adguard`, `/install_module ssh`, `/install_module tunnel`, `/install_module ts`, `/install_module traffic`, `/install_module imsi`, `/install_module tor`, `/install_module mitm`, etc.
 
