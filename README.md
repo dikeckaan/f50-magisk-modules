@@ -31,6 +31,7 @@ machine-readable catalog. Add a module = add an entry there.
 | **vpn-gateway** | Fork of Kr328/vpn-gateway. Routes LAN clients through tun0, plus a Tailscale-aware exception (pref 9990) so on-device services reach Tailscale peers correctly without their replies being swallowed by the VPN tunnel. | [magisk-zte-f50-vpn-gateway](https://github.com/dikeckaan/magisk-zte-f50-vpn-gateway) |
 | **hotspot-region** | Change the WiFi regulatory region/country code at runtime (default TR, selectable) via `cmd wifi force-country-code` — no file/NVRAM edits, no bootloop risk. ADB CLI + bot `/region`. | [magisk-zte-f50-hotspot-region](https://github.com/dikeckaan/magisk-zte-f50-hotspot-region) |
 | **lite-mem** | Memory relief for the low-RAM F50: extra zstd zram swap, vm tuning, configurable debloat, and a shell/bot-toggleable kill of the ZTE goform web panel. CLI `lite-mem status / webui off\|on`, bot `/lite`. | [magisk-zte-f50-lite-mem](https://github.com/dikeckaan/magisk-zte-f50-lite-mem) |
+| **webview-provider** | Ships Google WebView as a system app + product overlay registering it as the system WebView provider (stock F50 has none). ~247MB bundled APK (release-asset only; excluded from git). | [magisk-zte-f50-webview-provider](https://github.com/dikeckaan/magisk-zte-f50-webview-provider) |
 
 ## Dependency graph
 

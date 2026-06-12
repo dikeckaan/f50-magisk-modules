@@ -266,6 +266,20 @@
                 "memory"
             ],
             "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-lite-mem/main/update.json"
+        },
+        {
+            "id": "webview-provider",
+            "name": "WebView Provider (Google WebView)",
+            "description": "Ships Google WebView as a system app + product overlay registering it as the system WebView provider. The stock F50 has no usable WebView. ~247MB (bundled APK).",
+            "required": false,
+            "arch": "arm64",
+            "min_magisk_version": 26000,
+            "dependencies": [],
+            "aliases": [
+                "webview",
+                "wv"
+            ],
+            "update_json": "https://raw.githubusercontent.com/dikeckaan/magisk-zte-f50-webview-provider/main/update.json"
         }
     ]
 }
